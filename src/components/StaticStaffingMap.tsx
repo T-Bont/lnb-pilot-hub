@@ -29,8 +29,8 @@ const getMarkerPosition = (lat: number, lng: number) => {
   // Map bounds (approximate for North America view)
   const minLat = 15;
   const maxLat = 55;
-  const minLng = -130;
-  const maxLng = -60;
+  const minLng = -125;
+  const maxLng = -65;
   
   // Convert to percentage (inverted for Y axis)
   const x = ((lng - minLng) / (maxLng - minLng)) * 100;
