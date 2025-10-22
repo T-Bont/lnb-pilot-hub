@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
 import { Plane, Users, MapPin } from 'lucide-react';
-import { StaffingMap } from '@/components/StaffingMap';
+import { StaticStaffingMap } from '@/components/StaticStaffingMap';
 
 interface Destination {
   id: string;
@@ -101,7 +101,7 @@ const Staffing = () => {
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Interactive Staffing Dashboard</h1>
           <p className="text-muted-foreground">
-            Real-time view of staffing needs and flight operations across 83 North American destinations
+            Real-time view of staffing needs and flight operations across 6 key North American destinations
           </p>
         </div>
 
@@ -149,9 +149,9 @@ const Staffing = () => {
           <CardHeader>
             <CardTitle>North America Destination Map</CardTitle>
             <CardDescription>
-              Interactive map showing 83 destinations with flight and staffing data. 
+              Interactive map showing 6 key destinations with flight and staffing data. 
               Red markers = high staffing needs, Yellow = moderate, Green = adequate.
-              Marker size indicates activity level.
+              Marker size indicates flight activity. Click or hover markers for details.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -161,7 +161,7 @@ const Staffing = () => {
                   <p className="text-muted-foreground">Loading destinations...</p>
                 </div>
               ) : (
-                <StaffingMap destinationStats={destinationStats} />
+                <StaticStaffingMap destinationStats={destinationStats} />
               )}
             </div>
           </CardContent>
