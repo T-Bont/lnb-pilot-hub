@@ -188,52 +188,54 @@ const Staffing = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
-                  {destinationStats.map((stat) => {
-                    const markerStyle = getMarkerStyle(stat.openShifts, stat.upcomingFlights);
-                    return (
-                      <CircleMarker
-                        key={stat.destination.id}
-                        center={[Number(stat.destination.latitude), Number(stat.destination.longitude)]}
-                        pathOptions={markerStyle}
-                        radius={markerStyle.radius}
-                      >
-                        <Popup>
-                          <div className="p-2 min-w-[200px]">
-                            <div className="font-semibold text-base mb-1">
-                              {stat.destination.airport_code}
-                            </div>
-                            <div className="text-sm font-medium mb-2">
-                              {stat.destination.city}, {stat.destination.state_province || stat.destination.country}
-                            </div>
-                            <div className="space-y-1 text-sm">
-                              <div className="flex items-center justify-between">
-                                <span className="text-muted-foreground flex items-center gap-1">
-                                  <Plane className="h-3 w-3" /> Flights:
-                                </span>
-                                <span className="font-medium">{stat.upcomingFlights}</span>
+                  <>
+                    {destinationStats.map((stat) => {
+                      const markerStyle = getMarkerStyle(stat.openShifts, stat.upcomingFlights);
+                      return (
+                        <CircleMarker
+                          key={stat.destination.id}
+                          center={[Number(stat.destination.latitude), Number(stat.destination.longitude)]}
+                          pathOptions={markerStyle}
+                          radius={markerStyle.radius}
+                        >
+                          <Popup>
+                            <div className="p-2 min-w-[200px]">
+                              <div className="font-semibold text-base mb-1">
+                                {stat.destination.airport_code}
                               </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-muted-foreground flex items-center gap-1">
-                                  <Users className="h-3 w-3" /> Open Shifts:
-                                </span>
-                                <span className="font-medium">{stat.openShifts}</span>
+                              <div className="text-sm font-medium mb-2">
+                                {stat.destination.city}, {stat.destination.state_province || stat.destination.country}
                               </div>
+                              <div className="space-y-1 text-sm">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-muted-foreground flex items-center gap-1">
+                                    <Plane className="h-3 w-3" /> Flights:
+                                  </span>
+                                  <span className="font-medium">{stat.upcomingFlights}</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-muted-foreground flex items-center gap-1">
+                                    <Users className="h-3 w-3" /> Open Shifts:
+                                  </span>
+                                  <span className="font-medium">{stat.openShifts}</span>
+                                </div>
+                              </div>
+                              {stat.openShifts > 5 && (
+                                <Badge variant="destructive" className="mt-2 w-full justify-center">
+                                  Critical Shortage
+                                </Badge>
+                              )}
+                              {stat.openShifts > 2 && stat.openShifts <= 5 && (
+                                <Badge className="mt-2 w-full justify-center bg-amber-500">
+                                  Moderate Shortage
+                                </Badge>
+                              )}
                             </div>
-                            {stat.openShifts > 5 && (
-                              <Badge variant="destructive" className="mt-2 w-full justify-center">
-                                Critical Shortage
-                              </Badge>
-                            )}
-                            {stat.openShifts > 2 && stat.openShifts <= 5 && (
-                              <Badge className="mt-2 w-full justify-center bg-amber-500">
-                                Moderate Shortage
-                              </Badge>
-                            )}
-                          </div>
-                        </Popup>
-                      </CircleMarker>
-                    );
-                  })}
+                          </Popup>
+                        </CircleMarker>
+                      );
+                    })}
+                  </>
                 </MapContainer>
               )}
             </div>
