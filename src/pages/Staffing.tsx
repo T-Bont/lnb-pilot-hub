@@ -2,11 +2,9 @@ import { Navigation } from '@/components/Navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { MapContainer, TileLayer } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import { Badge } from '@/components/ui/badge';
 import { Plane, Users, MapPin } from 'lucide-react';
-import { StaffingMarkers } from '@/components/StaffingMarkers';
+import { StaffingMap } from '@/components/StaffingMap';
 
 interface Destination {
   id: string;
@@ -163,19 +161,7 @@ const Staffing = () => {
                   <p className="text-muted-foreground">Loading destinations...</p>
                 </div>
               ) : (
-                <MapContainer
-                  center={[45, -100]}
-                  zoom={4}
-                  style={{ height: '100%', width: '100%' }}
-                  scrollWheelZoom={true}
-                  zoomControl={true}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <StaffingMarkers destinationStats={destinationStats} />
-                </MapContainer>
+                <StaffingMap destinationStats={destinationStats} />
               )}
             </div>
           </CardContent>
