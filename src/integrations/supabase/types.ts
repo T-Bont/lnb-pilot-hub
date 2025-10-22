@@ -41,6 +41,42 @@ export type Database = {
         }
         Relationships: []
       }
+      destinations: {
+        Row: {
+          airport_code: string
+          city: string
+          country: string
+          created_at: string | null
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          state_province: string | null
+        }
+        Insert: {
+          airport_code: string
+          city: string
+          country: string
+          created_at?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          state_province?: string | null
+        }
+        Update: {
+          airport_code?: string
+          city?: string
+          country?: string
+          created_at?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          state_province?: string | null
+        }
+        Relationships: []
+      }
       employees: {
         Row: {
           available_pto_hrs: number | null
