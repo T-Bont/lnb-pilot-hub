@@ -27,10 +27,10 @@ interface StaticStaffingMapProps {
 // Convert lat/long to percentage position on the map
 const getMarkerPosition = (lat: number, lng: number) => {
   // Map bounds (fine-tuned for North America view)
-  const minLat = 10;
-  const maxLat = 10;
-  const minLng = -10;
-  const maxLng = -10;
+  const minLat = 25;
+  const maxLat = 50;
+  const minLng = -125;
+  const maxLng = -65;
 
   // Convert to percentage (inverted for Y axis)
   const x = ((lng - minLng) / (maxLng - minLng)) * 100;
