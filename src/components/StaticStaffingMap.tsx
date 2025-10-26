@@ -16,7 +16,6 @@ interface Destination {
 
 interface DestinationStats {
   destination: Destination;
-  upcomingFlights: number;
   openShifts: number;
 }
 
@@ -49,9 +48,9 @@ export const StaticStaffingMap = ({ destinationStats }: StaticStaffingMapProps) 
     return "bg-green-500";
   };
 
-  const getMarkerSize = (flights: number) => {
-    if (flights > 10) return "w-6 h-6";
-    if (flights > 5) return "w-5 h-5";
+  const getMarkerSize = (openShifts: number) => {
+    if (openShifts > 5) return "w-6 h-6";
+    if (openShifts > 2) return "w-5 h-5";
     return "w-4 h-4";
   };
 
@@ -67,7 +66,7 @@ export const StaticStaffingMap = ({ destinationStats }: StaticStaffingMapProps) 
           <div key={stat.destination.id} className="absolute" style={{ left: position.x, top: position.y }}>
             {/* Marker */}
             <button
-              className={`${getMarkerColor(stat.openShifts)} ${getMarkerSize(stat.upcomingFlights)} rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-all hover:scale-125 cursor-pointer relative z-10`}
+              className={`${getMarkerColor(stat.openShifts)} ${getMarkerSize(stat.openShifts)} rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-all hover:scale-125 cursor-pointer relative z-10`}
               onMouseEnter={() => setHoveredDestination(stat.destination.id)}
               onMouseLeave={() => setHoveredDestination(null)}
               onClick={() =>
@@ -91,10 +90,6 @@ export const StaticStaffingMap = ({ destinationStats }: StaticStaffingMapProps) 
                       {stat.destination.city}, {stat.destination.state_province || stat.destination.country}
                     </p>
                     <div className="space-y-1 pt-2 border-t">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Flights:</span>
-                        <span className="font-medium">{stat.upcomingFlights}</span>
-                      </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Open Shifts:</span>
                         <span className="font-medium">{stat.openShifts}</span>

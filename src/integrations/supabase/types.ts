@@ -201,36 +201,58 @@ export type Database = {
       }
       shifts: {
         Row: {
+          airport_code: string | null
           created_at: string | null
+          department: string | null
           employee_id: string | null
           id: string
+          incentive_bonus: number | null
+          job_role: string | null
           location: string
           shift_date: string
           shift_end: string
+          shift_hours: number | null
           shift_start: string
           status: string | null
         }
         Insert: {
+          airport_code?: string | null
           created_at?: string | null
+          department?: string | null
           employee_id?: string | null
           id?: string
+          incentive_bonus?: number | null
+          job_role?: string | null
           location: string
           shift_date: string
           shift_end: string
+          shift_hours?: number | null
           shift_start: string
           status?: string | null
         }
         Update: {
+          airport_code?: string | null
           created_at?: string | null
+          department?: string | null
           employee_id?: string | null
           id?: string
+          incentive_bonus?: number | null
+          job_role?: string | null
           location?: string
           shift_date?: string
           shift_end?: string
+          shift_hours?: number | null
           shift_start?: string
           status?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_shifts_airport_code"
+            columns: ["airport_code"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["airport_code"]
+          },
           {
             foreignKeyName: "shifts_employee_id_fkey"
             columns: ["employee_id"]

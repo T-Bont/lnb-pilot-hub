@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
-import { Plane, Users, MapPin } from 'lucide-react';
+import { Users, MapPin } from 'lucide-react';
 import { StaticStaffingMap } from '@/components/StaticStaffingMap';
 
 interface Destination {
@@ -19,14 +19,12 @@ interface Destination {
 
 interface DestinationStats {
   destination: Destination;
-  upcomingFlights: number;
   openShifts: number;
 }
 
 const Staffing = () => {
   const [destinationStats, setDestinationStats] = useState<DestinationStats[]>([]);
   const [loading, setLoading] = useState(true);
-  const [totalFlights, setTotalFlights] = useState(0);
   const [totalOpenShifts, setTotalOpenShifts] = useState(0);
 
   useEffect(() => {
@@ -43,16 +41,7 @@ const Staffing = () => {
         return;
       }
 
-      // Fetch all flights
-      const { data: flights, error: flightsError } = await supabase
-        .from('flights')
-        .select('*');
-
-      if (flightsError) {
-        console.error('Error fetching flights:', flightsError);
-      }
-
-      // Fetch all shifts
+      // Fetch all open shifts
       const { data: shifts, error: shiftsError } = await supabase
         .from('shifts')
         .select('*')
@@ -64,25 +53,18 @@ const Staffing = () => {
 
       // Calculate stats for each destination
       const stats: DestinationStats[] = (destinations || []).map((dest) => {
-        // Count flights to/from this destination
-        const upcomingFlights = (flights || []).filter(
-          (f) => f.origin === dest.city || f.destination === dest.city
-        ).length;
-
-        // Count open shifts at this location
+        // Count open shifts at this airport
         const openShifts = (shifts || []).filter(
-          (s) => s.location === dest.city
+          (s) => s.airport_code === dest.airport_code
         ).length;
 
         return {
           destination: dest,
-          upcomingFlights,
           openShifts,
         };
       });
 
       setDestinationStats(stats);
-      setTotalFlights(flights?.length || 0);
       setTotalOpenShifts(shifts?.length || 0);
       setLoading(false);
     };
@@ -101,24 +83,12 @@ const Staffing = () => {
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Interactive Staffing Dashboard</h1>
           <p className="text-muted-foreground">
-            Real-time view of staffing needs and flight operations across 6 key North American destinations
+            Real-time view of open shifts across 7 key North American destinations
           </p>
         </div>
 
         {/* Summary Stats */}
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Flights Today</CardTitle>
-              <Plane className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalFlights}</div>
-              <p className="text-xs text-muted-foreground">
-                Across all destinations
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Open Shifts</CardTitle>
@@ -149,9 +119,9 @@ const Staffing = () => {
           <CardHeader>
             <CardTitle>North America Destination Map</CardTitle>
             <CardDescription>
-              Interactive map showing 6 key destinations with flight and staffing data. 
+              Interactive map showing 7 key destinations with staffing data. 
               Red markers = high staffing needs, Yellow = moderate, Green = adequate.
-              Marker size indicates flight activity. Click or hover markers for details.
+              Click or hover markers for details.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -192,10 +162,6 @@ const Staffing = () => {
                       <CardDescription>{stat.destination.city}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2 pb-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Flights:</span>
-                        <span className="font-medium">{stat.upcomingFlights}</span>
-                      </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Open Shifts:</span>
                         <span className="font-medium">{stat.openShifts}</span>
