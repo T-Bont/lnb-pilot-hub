@@ -72,6 +72,30 @@ const Staffing = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Load Tableau visualization script
+    const script = document.createElement('script');
+    script.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+    script.async = true;
+    
+    const divElement = document.getElementById('viz1761676711385');
+    if (divElement) {
+      const vizElement = divElement.getElementsByTagName('object')[0];
+      if (vizElement) {
+        vizElement.style.width = '100%';
+        vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+        vizElement.parentNode?.insertBefore(script, vizElement);
+      }
+    }
+
+    return () => {
+      // Cleanup script on unmount
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, [loading]);
+
   const departmentWithMostShortages = destinationStats
     .sort((a, b) => b.openShifts - a.openShifts)[0]?.destination.city || 'N/A';
 
@@ -117,21 +141,46 @@ const Staffing = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>North America Destination Map</CardTitle>
+            <CardTitle>Staffing Dashboard</CardTitle>
             <CardDescription>
-              Interactive map showing 7 key destinations with staffing data. 
-              Red markers = high staffing needs, Yellow = moderate, Green = adequate.
-              Click or hover markers for details.
+              Interactive Tableau dashboard showing staffing metrics and insights
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[600px] rounded-lg overflow-hidden border">
+            <div className="rounded-lg overflow-hidden border">
               {loading ? (
-                <div className="h-full flex items-center justify-center bg-muted">
-                  <p className="text-muted-foreground">Loading destinations...</p>
+                <div className="h-[600px] flex items-center justify-center bg-muted">
+                  <p className="text-muted-foreground">Loading dashboard...</p>
                 </div>
               ) : (
-                <StaticStaffingMap destinationStats={destinationStats} />
+                <div className="tableauPlaceholder" id="viz1761676711385" style={{ position: 'relative' }}>
+                  <noscript>
+                    <a href="#">
+                      <img 
+                        alt="Sheet 1" 
+                        src="https://public.tableau.com/static/images/LN/LNBDashboard/Sheet1/1_rss.png" 
+                        style={{ border: 'none' }} 
+                      />
+                    </a>
+                  </noscript>
+                  <object className="tableauViz" style={{ display: 'none' }}>
+                    <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+                    <param name="embed_code_version" value="3" />
+                    <param name="site_root" value="" />
+                    <param name="name" value="LNBDashboard&#47;Sheet1" />
+                    <param name="tabs" value="no" />
+                    <param name="toolbar" value="yes" />
+                    <param name="static_image" value="https://public.tableau.com/static/images/LN/LNBDashboard/Sheet1/1.png" />
+                    <param name="animate_transition" value="yes" />
+                    <param name="display_static_image" value="yes" />
+                    <param name="display_spinner" value="yes" />
+                    <param name="display_overlay" value="yes" />
+                    <param name="display_count" value="yes" />
+                    <param name="language" value="en-US" />
+                    <param name="filter" value="publish=yes" />
+                    <param name="filter" value="showOnboarding=true" />
+                  </object>
+                </div>
               )}
             </div>
           </CardContent>
